@@ -37,16 +37,30 @@ COPY questions FROM '/Users/xinxu/Desktop/work/SDC-questionsAndAnswers-API/data/
 COPY answers FROM '/Users/xinxu/Desktop/work/SDC-questionsAndAnswers-API/data/answers.csv' DELIMITERS ',' CSV HEADER;
 COPY ans_photos FROM '/Users/xinxu/Desktop/work/SDC-questionsAndAnswers-API/data/answers_photos.csv' DELIMITERS ',' CSV HEADER;
 
-ALTER TABLE questions ADD COLUMN date_timestamp TIMESTAMP;
-UPDATE questions SET date_timestamp = TIMESTAMP 'epoch' + date_written * INTERVAL '1 millisecond';
-ALTER TABLE questions DROP COLUMN date_written;
+-- ALTER TABLE questions ADD COLUMN date_timestamp TIMESTAMP;
+-- UPDATE questions SET date_timestamp = TIMESTAMP 'epoch' + date_written * INTERVAL '1 millisecond';
+-- ALTER TABLE questions DROP COLUMN date_written;
 
-ALTER TABLE answers ADD COLUMN date_timestamp TIMESTAMP;
-UPDATE answers SET date_timestamp = TIMESTAMP 'epoch' + date_written * INTERVAL '1 millisecond';
-ALTER TABLE answers DROP COLUMN date_written;
+-- ALTER TABLE answers ADD COLUMN date_timestamp TIMESTAMP;
+-- UPDATE answers SET date_timestamp = TIMESTAMP 'epoch' + date_written * INTERVAL '1 millisecond';
+-- ALTER TABLE answers DROP COLUMN date_written;
 
-ALTER TABLE questions
-ALTER COLUMN date_timestamp SET DEFAULT now();
+-- ALTER TABLE questions
+-- ALTER COLUMN date_timestamp SET DEFAULT now();
 -- ALTER TABLE questions ALTER COLUMN date_timestamp SET DATA TYPE TIMESTAMP with time zone
 -- USING TIMESTAMP with time zone 'epoch' + date_written * INTERVAL '1 millisecond',
 -- ALTER COLUMN date_timestamp SET DEFAULT now();
+
+ALTER TABLE questions
+ADD COLUMN date_timestamp TIMESTAMP,
+ALTER COLUMN date_timestamp SET DATA TYPE TIMESTAMP with time zone
+USING TIMESTAMP with time zone 'epoch' + date_written * INTERVAL '1 millisecond',
+ALTER COLUMN date_timestamp SET DEFAULT now(),
+DROP COLUMN date_written;
+
+ALTER TABLE answers
+ADD COLUMN date_timestamp TIMESTAMP,
+ALTER COLUMN date_timestamp SET DATA TYPE TIMESTAMP with time zone
+USING TIMESTAMP with time zone 'epoch' + date_written * INTERVAL '1 millisecond',
+ALTER COLUMN date_timestamp SET DEFAULT now(),
+DROP COLUMN date_written;
