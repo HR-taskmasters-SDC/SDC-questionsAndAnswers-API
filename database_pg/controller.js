@@ -79,6 +79,10 @@ const getAnswersById = (req, res) => {
 
 
 const addAnswer = (req, res) => {
+  const id = parseInt(req.params.question_id);
+  const { body, name, email, photos } = req.body;
+  res.send(req);
+  console.log(req);
 };
 
 const markAhelpful = (req, res) => {

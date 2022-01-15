@@ -17,7 +17,7 @@ const getAnswer = `SELECT a.answer_id, a.body, a.date_timestamp as date, a.answe
 	                  SELECT array_to_json(coalesce(array_agg(photos), array[]::record[]))
 	                  FROM
 		                (
-			                SELECT photos.answer_id as id, photos.img_url as url
+			                SELECT photos.id, photos.img_url as url
 			                FROM answers
 			                INNER JOIN ans_photos photos
 			                ON answers.answer_id = photos.answer_id
@@ -29,7 +29,6 @@ const getAnswer = `SELECT a.answer_id, a.body, a.date_timestamp as date, a.answe
                   ORDER BY a.helpful DESC
                   LIMIT $2
                   OFFSET $3;`;
-
 
 
 // const getAnswer = `SELECT answer_id, body, date_timestamp AS date, answerer_name, helpful AS helpfulness
