@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '../dist')));
 
-app.use('/api/v1', router);
+app.use('/api', router);
 
 app.listen(port, (err) => {
   err ? console.error(err) : console.log(`Listening on port ${port}`)

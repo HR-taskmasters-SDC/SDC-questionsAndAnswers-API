@@ -13,5 +13,12 @@ router.route('/qa/questions/:question_id/report')
 
 router.route('/qa/questions/:question_id/answers')
   .get(controller.getAnswersById)
+  .post(controller.addAnswer)
+
+router.route('/qa/answers/:answer_id/helpful')
+  .put(controller.markAhelpful)
+
+router.route('/qa/answers/:answer_id/report')
+  .put(controller.reportAnswer)
 
 module.exports = router;
