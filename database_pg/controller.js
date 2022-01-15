@@ -24,7 +24,6 @@ const getQuestionsById = (req, res) => {
 const addQuestion = (req, res) => {
   const {product_id, body, name, email } = req.body;
   const values = [product_id, body, name, email];
-  console.log(req.body);
   pool
     .query(queries.addQuestion, values)
     .then((results) => {

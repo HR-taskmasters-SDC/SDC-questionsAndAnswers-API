@@ -12,29 +12,32 @@ const reportQuestion = `UPDATE questions SET reported = true WHERE question_id =
 const markAhelpful = `UPDATE answers SET helpful = helpful + 1 WHERE answer_id = $1`;
 const reportAnswer = `UPDATE answers SET reported = true WHERE answer_id = $1`;
 
-// const getAnswer = `SELECT a.answer_id, a.body, a.date_timestamp as date, a.answerer_name, a.helpful as helpfulness,
-//                   (
-// 	                  SELECT array_to_json(coalesce(array_agg(photos), array[]::record[]))
-// 	                  FROM
-// 		                (
-// 			                SELECT photos.answer_id as id, photos.img_url as url
-// 			                FROM answers
-// 			                INNER JOIN ans_photos photos
-// 			                ON answers.answer_id = photos.answer_id
-// 			                WHERE photos.answer_id = a.answer_id
-// 		                ) photos
-//                   ) AS photos
-//                   FROM answers a
-//                   WHERE a.question_id = 1 AND a.reported = false
-//                   ORDER BY a.helpful DESC
-//                   LIMIT 5;`;
-
-const getAnswer = `SELECT answer_id, body, date_timestamp AS date, answerer_name, helpful AS helpfulness
-                  FROM answers
-                  WHERE question_id = $1 AND reported = false
-                  ORDER BY helpful DESC
+const getAnswer = `SELECT a.answer_id, a.body, a.date_timestamp as date, a.answerer_name, a.helpful as helpfulness,
+                  (
+	                  SELECT array_to_json(coalesce(array_agg(photos), array[]::record[]))
+	                  FROM
+		                (
+			                SELECT photos.answer_id as id, photos.img_url as url
+			                FROM answers
+			                INNER JOIN ans_photos photos
+			                ON answers.answer_id = photos.answer_id
+			                WHERE photos.answer_id = a.answer_id
+		                ) photos
+                  ) AS photos
+                  FROM answers a
+                  WHERE a.question_id = $1 AND a.reported = false
+                  ORDER BY a.helpful DESC
                   LIMIT $2
                   OFFSET $3;`;
+
+
+
+// const getAnswer = `SELECT answer_id, body, date_timestamp AS date, answerer_name, helpful AS helpfulness
+//                   FROM answers
+//                   WHERE question_id = $1 AND reported = false
+//                   ORDER BY helpful DESC
+//                   LIMIT $2
+//                   OFFSET $3;`;
 
 module.exports = {
   getQuestion,

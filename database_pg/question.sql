@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS questions;
+colDROP DATABASE IF EXISTS questions;
 
 CREATE DATABASE questions;
 
@@ -52,3 +52,5 @@ USING TIMESTAMP with time zone 'epoch' + date_written * INTERVAL '1 millisecond'
 ALTER COLUMN date_timestamp SET DEFAULT now();
 ALTER TABLE answers DROP COLUMN date_written;
 
+SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"questions"', 'question_id')), (SELECT (MAX("question_id") + 1) FROM "questions"), FALSE);
+SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"answers"', 'answer_id')), (SELECT (MAX("answer_id") + 1) FROM "answers"), FALSE);
