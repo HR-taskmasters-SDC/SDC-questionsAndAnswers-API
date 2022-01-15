@@ -1,0 +1,8 @@
+node_modules/
+database_pg/.env
+data/*
+
+.DS_Store
+package-lock.json
+coverage
+*.log
