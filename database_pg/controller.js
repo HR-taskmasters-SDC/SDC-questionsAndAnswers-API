@@ -7,7 +7,8 @@ const getQuestionsById = (req, res) => {
   let page = req.query.page || 1;
   let count = req.query.count || 5;
   const limit = page * count;
-  const values = [id, limit];
+  const offset = page * count - count;
+  const values = [id, limit, offset];
   pool
     .query(queries.getQuestion, values)
     .then((results) => {
@@ -20,31 +21,10 @@ const getQuestionsById = (req, res) => {
     .catch((err) => res.send(err));
 };
 
-const getQuestion = (req, res) => {
-  const id = parseInt(req.query.product_id);
-  const query = `SELECT ARRAY_AGG(question_id, body, date_timestamp) FROM questions WHERE product_id=$1 LIMIT 2;`;
-  pool
-    .query(query, [id])
-    .then((results) => {
-      res.status(200).json(results);
-      console.log(results);
-    })
-    .catch((err) => console.error(err))
-};
-
 const addQuestion = (req, res) => {
   const {product_id, body, name, email } = req.body;
   const values = [product_id, body, name, email];
   console.log(req.body);
-  //const query = `INSERT INTO questions (product_id, body, asker_name, asker_email) VALUES (${product_id}, '${body}', '${name}', '${email}');`;
-  // pool.query(query, (err, results) => {
-  //   if(err) {
-  //     console.error(err);
-  //     res.send('failure to add question')
-  //   } else {
-  //     res.status(201).send('success add question');
-  //   }
-  // });
   pool
     .query(queries.addQuestion, values)
     .then((results) => {
@@ -60,38 +40,20 @@ const markQuestionHelpful = (req, res) => {
   pool
   .query(queries.markQuestionHelpful, [question_id])
   .then((results) => {
-    res.status(204);
+    res.status(204).send('successful mark helpful');
   })
   .catch((err) => {
     res.send(err);
     console.error(err);
   });
-  //const query = `UPDATE questions SET helpful = helpful + 1 WHERE question_id = ${id}`;
-  // pool.query(query, (err, results) => {
-  //   if(err) {
-  //     console.error(err);
-  //     res.send('failure to mark helpfulness')
-  //   } else {
-  //     res.status(204);
-  //   }
-  // });
 };
 
 const reportQuestion = (req, res) => {
   const id = req.params.question_id;
-  pool.query(queries.reportQuestion, [id], (err, results) => {
-    if(err) {
-      console.error(err);
-      res.send('failure to report a question')
-    } else {
-      res.status(204);
-    }
-  });
-  // const query = `UPDATE questions SET reported = true WHERE question_id = $1`;
-  // pool
-  //   .query(query, [id])
-  //   .then((results) => res.status(204))
-  //   .catch((err) => console.error(err));
+  pool
+    .query(queries.reportQuestion, [id])
+    .then((results) => res.status(204).send('success report question'))
+    .catch((err) => console.error(err));
 };
 
 const getAnswersById = (req, res) => {
@@ -115,7 +77,10 @@ const markAhelpful = (req, res) => {
   const id = req.params.answer_id;
   pool
     .query(queries.markAhelpful, [id])
-    .then((results) => res.status(204))
+    .then((results) => {
+      res.status(204).send('success mark an answer helpful');
+      console.log('success mark an answer helpful');
+    })
     .catch((err) => console.error(err));
 };
 
@@ -123,7 +88,10 @@ const reportAnswer = (req, res) => {
   const id = req.params.answer_id;
   pool
     .query(queries.reportAnswer, [id])
-    .then((results) => res.status(204))
+    .then((results) => {
+      res.status(204).send('succes report an answer');
+      console.log('success report an answer');
+    })
     .catch((err) => console.error(err));
 };
 
@@ -138,5 +106,4 @@ module.exports = {
   addAnswer,
   markAhelpful,
   reportAnswer,
-  getQuestion
 };
