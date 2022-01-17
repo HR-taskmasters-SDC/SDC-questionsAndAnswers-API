@@ -92,9 +92,10 @@ const addAnswer = (req, res) => {
         pool
           .query(queries.addPhoto, [ans_id, url])
           .then(() => {
-            res.status(201).send('success add an answer')
+            console.log('success add photo');
           })
       })
+      res.status(201).send('success add an answer');
     })
     .catch((err) => res.status(400).send(err))
 };

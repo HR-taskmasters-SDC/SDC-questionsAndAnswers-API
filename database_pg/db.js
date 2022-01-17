@@ -11,7 +11,7 @@ const connection = {
 
 const pool = new Pool(connection);
 pool.connect()
-  .then((response) => {
+  .then(() => {
     console.log('connect to database')
   })
   .catch((err) => console.error(err));
