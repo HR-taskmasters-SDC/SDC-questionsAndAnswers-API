@@ -57,20 +57,46 @@ const reportQuestion = (req, res) => {
 };
 
 const getAnswersById = (req, res) => {
-  const id = req.params.question_id;
-  const { page, count } = req.query;
-  console.log(req.params);
-  console.log(req.query);
-  // const query = `SELECT * FROM answers WHERE question_id=${id} AND reported=false ORDER BY helpful DESC;`;
-  // pool.query(query, (err, results) => {
-  //   if(err) console.error(err);
-  //   res.status(200).json(results);
-  // });
+  const id = parseInt(req.params.question_id);
+  const page = req.query.page || 1;
+  const count = req.query.count || 5;
+  const values = [id, page * count, page * count - count];
+  pool
+    .query(queries.getAnswer, values)
+    .then((results) => {
+      const answers = {
+        "question": id,
+        "page": page,
+        "count": count,
+        "results": results.rows
+      };
+      res.status(200).json(answers);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.send(err);
+    })
 };
 
 
 
 const addAnswer = (req, res) => {
+  const id = parseInt(req.params.question_id);
+  const { body, name, email, photos } = req.body;
+  const values = [id, body, name, email];
+  pool
+    .query(queries.addAnswer, values)
+    .then((results) => {
+      const ans_id = results.rows[0].answer_id;
+      photos.forEach((url) => {
+        pool
+          .query(queries.addPhoto, [ans_id, url])
+          .then(() => {
+            res.status(201).send('success add an answer')
+          })
+      })
+    })
+    .catch((err) => res.status(400).send(err))
 };
 
 const markAhelpful = (req, res) => {
