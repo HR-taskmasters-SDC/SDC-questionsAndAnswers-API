@@ -3,7 +3,7 @@ const getQuestion = `SELECT question_id, body AS question_body, date_timestamp A
                   WHERE product_id = $1 AND reported = false
                   ORDER BY helpful DESC
                   LIMIT $2
-                  OFFSET $3;`
+                  OFFSET $3;`;
 
 const addQuestion =`INSERT INTO questions (product_id, body, asker_name, asker_email, reported, helpful, date_timestamp)
                     VALUES ($1, $2, $3, $4, DEFAULT, DEFAULT, DEFAULT);`;
