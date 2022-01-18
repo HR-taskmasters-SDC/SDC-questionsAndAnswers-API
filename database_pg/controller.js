@@ -15,6 +15,7 @@ const getQuestionsById = (req, res) => {
         "results": results.rows
       };
       res.status(200).json(questions);
+      //pool.release();
     })
     .catch((err) => res.send(err));
 };
