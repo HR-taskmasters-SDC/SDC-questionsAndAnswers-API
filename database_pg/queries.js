@@ -1,8 +1,21 @@
-const getQuestion = `SELECT question_id, body AS question_body, date_timestamp AS question_date, asker_name, helpful AS question_helpfulness, reported
-                  FROM questions
-                  WHERE product_id = $1 AND reported = false
-                  ORDER BY helpful DESC
-                  LIMIT $2;`;
+const getQuestion = `SELECT q.question_id, q.body AS question_body, q.date_timestamp AS question_date, q.asker_name, q.helpful AS question_helpfulness, q.reported,
+                  coalesce(json_agg(
+                    json_build_object(
+                      'id', answers.answer_id,
+                      'body', answers.body,
+                      'date', answers.date_timestamp,
+                      'answerer_name', answers.answerer_name,
+                      'helpfulness', answers.helpful
+                    )
+                  ) FILTER (WHERE answers.answer_id IS NOT NULL), '[]') AS answers
+                  FROM questions q
+                  LEFT JOIN answers ON q.question_id = answers.question_id
+                  WHERE q.product_id = $1 AND q.reported = false
+                  GROUP BY q.question_id
+                  ORDER BY q.helpful DESC
+                  LIMIT $2
+                  OFFSET $3;`;
+
 
 const addQuestion =`INSERT INTO questions (product_id, body, asker_name, asker_email, reported, helpful, date_timestamp)
                     VALUES ($1, $2, $3, $4, DEFAULT, DEFAULT, DEFAULT);`;
@@ -31,7 +44,8 @@ const getAnswer = `SELECT a.answer_id, a.body, a.date_timestamp as date, a.answe
                       FROM answers a
                       WHERE a.question_id = $1 AND a.reported = false
                       ORDER BY a.helpful DESC
-                      LIMIT $2;`;
+                      LIMIT $2
+                      OFFSET $3;`;
 
 const addAnswer = `INSERT INTO answers (question_id, body, answerer_name, answer_email, reported, helpful, date_timestamp)
                   VALUES ($1, $2, $3, $4, DEFAULT, DEFAULT, DEFAULT)

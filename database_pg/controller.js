@@ -6,7 +6,7 @@ const getQuestionsById = (req, res) => {
   const id = parseInt(req.query.product_id);
   const page = req.query.page || 1;
   const count = req.query.count || 5;
-  const values = [id, page * count];
+  const values = [id, count, page * count - count];
   pool
     .query(queries.getQuestion, values)
     .then((results) => {
@@ -15,7 +15,6 @@ const getQuestionsById = (req, res) => {
         "results": results.rows
       };
       res.status(200).json(questions);
-      //pool.release();
     })
     .catch((err) => res.send(err));
 };
@@ -59,7 +58,7 @@ const getAnswersById = (req, res) => {
   const id = parseInt(req.params.question_id);
   const page = req.query.page || 1;
   const count = req.query.count || 5;
-  const values = [id, page * count];
+  const values = [id, count, page * count - count];
   pool
     .query(queries.getAnswer, values)
     .then((results) => {

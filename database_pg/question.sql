@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS questions (
 
 CREATE TABLE IF NOT EXISTS answers (
   answer_id SERIAL NOT NULL PRIMARY KEY,
-  question_id INT NOT NULL,
+  question_id INT NOT NULL REFERENCES questions(question_id),
   body TEXT NOT NULL,
   date_written BIGINT,
   answerer_name TEXT NOT NULL,
