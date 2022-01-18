@@ -21,6 +21,10 @@
     "body-parser": "^1.19.1",
     "dotenv": "^12.0.3",
     "express": "^4.17.2",
+    "mocha": "^9.1.4",
     "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "supertest": "^6.2.1"
   }
 }
