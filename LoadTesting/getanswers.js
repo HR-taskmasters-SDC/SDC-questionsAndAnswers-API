@@ -19,8 +19,7 @@ export default () => {
     'is status 200': r => r.status === 200,
     'transaction time < 200ms': r => r.timings.duration < 200,
     'transaction time < 500ms': r => r.timings.duration < 500,
-    'transaction time < 5000ms': r => r.timings.duration < 5000,
-    'transaction time < 10000ms': r => r.timings.duration < 10000,
-    'transaction time < 15000ms': r => r.timings.duration < 15000
+    'transaction time < 1000ms': r => r.timings.duration < 1000,
+    'transaction time < 2000ms': r => r.timings.duration < 2000
   });
 }
