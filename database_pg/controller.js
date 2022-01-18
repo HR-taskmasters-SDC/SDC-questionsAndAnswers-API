@@ -4,11 +4,9 @@ const queries = require('./queries.js');
 const getQuestionsById = (req, res) => {
   //const id = parseInt(req.params.product_id);
   const id = parseInt(req.query.product_id);
-  let page = req.query.page || 1;
-  let count = req.query.count || 5;
-  const limit = page * count;
-  const offset = page * count - count;
-  const values = [id, limit, offset];
+  const page = req.query.page || 1;
+  const count = req.query.count || 5;
+  const values = [id, page * count];
   pool
     .query(queries.getQuestion, values)
     .then((results) => {
@@ -60,7 +58,7 @@ const getAnswersById = (req, res) => {
   const id = parseInt(req.params.question_id);
   const page = req.query.page || 1;
   const count = req.query.count || 5;
-  const values = [id, page * count, page * count - count];
+  const values = [id, page * count];
   pool
     .query(queries.getAnswer, values)
     .then((results) => {

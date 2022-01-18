@@ -2,8 +2,7 @@ const getQuestion = `SELECT question_id, body AS question_body, date_timestamp A
                   FROM questions
                   WHERE product_id = $1 AND reported = false
                   ORDER BY helpful DESC
-                  LIMIT $2
-                  OFFSET $3;`;
+                  LIMIT $2;`;
 
 const addQuestion =`INSERT INTO questions (product_id, body, asker_name, asker_email, reported, helpful, date_timestamp)
                     VALUES ($1, $2, $3, $4, DEFAULT, DEFAULT, DEFAULT);`;
@@ -32,8 +31,7 @@ const getAnswer = `SELECT a.answer_id, a.body, a.date_timestamp as date, a.answe
                       FROM answers a
                       WHERE a.question_id = $1 AND a.reported = false
                       ORDER BY a.helpful DESC
-                      LIMIT $2
-                      OFFSET $3;`;
+                      LIMIT $2;`;
 
 const addAnswer = `INSERT INTO answers (question_id, body, answerer_name, answer_email, reported, helpful, date_timestamp)
                   VALUES ($1, $2, $3, $4, DEFAULT, DEFAULT, DEFAULT)
