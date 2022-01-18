@@ -4,7 +4,7 @@ require('dotenv').config();
 const connection = {
   host: 'localhost',
   user: process.env.PG_USER,
-  password: '',
+  password: process.env.PG_PASSWORD,
   database: 'questions',
   port: 5432
 };

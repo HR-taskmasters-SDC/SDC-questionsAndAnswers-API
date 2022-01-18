@@ -58,6 +58,12 @@ SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"questions"', 'question_id')), (SE
 SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"answers"', 'answer_id')), (SELECT (MAX("answer_id") + 1) FROM "answers"), FALSE);
 SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"ans_photos"', 'id')), (SELECT (MAX("id") + 1) FROM "ans_photos"), FALSE);
 
-CREATE UNIQUE INDEX question_id_index ON questions(question_id, product_id);
-CREATE UNIQUE INDEX answer_id_index ON answers(answer_id, question_id);
-CREATE UNIQUE INDEX photo_id_index ON ans_photos(id, answer_id);
+-- CREATE UNIQUE INDEX q_product_index ON questions(product_id);
+-- CREATE UNIQUE INDEX a_question_index ON answers(question_id);
+-- CREATE UNIQUE INDEX a_answer_index ON ans_photos(answer_id);
+
+CREATE INDEX q_product_index ON questions(product_id);
+CREATE INDEX a_question_index ON answers(question_id);
+CREATE INDEX a_answer_index ON ans_photos(answer_id);
+CREATE INDEX q_reported_index ON questions(reported);
+CREATE INDEX a_reported_index ON answers(reported);
