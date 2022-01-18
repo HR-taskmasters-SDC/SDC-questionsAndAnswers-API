@@ -4,6 +4,8 @@ CREATE DATABASE questions;
 
 \c questions
 
+DROP TABLE questions, answers, ans_photos;
+
 CREATE TABLE IF NOT EXISTS questions (
   question_id SERIAL NOT NULL PRIMARY KEY,
   product_id INT NOT NULL,
@@ -56,6 +58,6 @@ SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"questions"', 'question_id')), (SE
 SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"answers"', 'answer_id')), (SELECT (MAX("answer_id") + 1) FROM "answers"), FALSE);
 SELECT SETVAL((SELECT PG_GET_SERIAL_SEQUENCE('"ans_photos"', 'id')), (SELECT (MAX("id") + 1) FROM "ans_photos"), FALSE);
 
-CREATE  UNIQUE INDEX question_id_index ON questions(question_id);
-CREATE  UNIQUE INDEX answer_id_index ON answers(answer_id);
-CREATE  UNIQUE INDEX photo_id_index ON ans_photos(id);
+CREATE UNIQUE INDEX question_id_index ON questions(question_id, product_id);
+CREATE UNIQUE INDEX answer_id_index ON answers(answer_id, question_id);
+CREATE UNIQUE INDEX photo_id_index ON ans_photos(id, answer_id);
