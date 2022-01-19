@@ -5,7 +5,13 @@ const getQuestion = `SELECT q.question_id, q.body AS question_body, q.date_times
                       'body', answers.body,
                       'date', answers.date_timestamp,
                       'answerer_name', answers.answerer_name,
-                      'helpfulness', answers.helpful
+                      'helpfulness', answers.helpful,
+                      'photos',
+                      (
+                        SELECT coalesce(json_agg(photos.img_url), '[]')
+                        FROM
+                        (SELECT ans_photos.img_url from ans_photos WHERE ans_photos.answer_id = answers.answer_id) AS photos
+                      )
                     )
                   ) FILTER (WHERE answers.answer_id IS NOT NULL), '[]') AS answers
                   FROM questions q
@@ -15,7 +21,6 @@ const getQuestion = `SELECT q.question_id, q.body AS question_body, q.date_times
                   ORDER BY q.helpful DESC
                   LIMIT $2
                   OFFSET $3;`;
-
 
 const addQuestion =`INSERT INTO questions (product_id, body, asker_name, asker_email, reported, helpful, date_timestamp)
                     VALUES ($1, $2, $3, $4, DEFAULT, DEFAULT, DEFAULT);`;
