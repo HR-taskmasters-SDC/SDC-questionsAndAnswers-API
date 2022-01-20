@@ -16,13 +16,15 @@ const getQuestionsById = (req, res) => {
       };
       res.status(200).json(questions);
     })
-    .catch((err) => res.send(err));
+    .catch((err) => {
+      res.send(err);
+      console.error(err);
+    });
 };
 
 const addQuestion = (req, res) => {
   const {product_id, body, name, email } = req.body;
   const values = [product_id, body, name, email];
-  console.log(req.body);
   pool
     .query(queries.addQuestion, values)
     .then((results) => {
@@ -30,6 +32,7 @@ const addQuestion = (req, res) => {
     })
     .catch((err) => {
       res.send(err);
+      console.error(err);
     })
 };
 
@@ -104,7 +107,6 @@ const markAhelpful = (req, res) => {
     .query(queries.markAhelpful, [id])
     .then((results) => {
       res.status(204).send('success mark an answer helpful');
-      console.log('success mark an answer helpful');
     })
     .catch((err) => console.error(err));
 };
@@ -115,7 +117,6 @@ const reportAnswer = (req, res) => {
     .query(queries.reportAnswer, [id])
     .then((results) => {
       res.status(204).send('succes report an answer');
-      console.log('success report an answer');
     })
     .catch((err) => console.error(err));
 };
